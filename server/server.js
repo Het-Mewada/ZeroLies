@@ -11,7 +11,7 @@ import { startDayLockCron } from './cron/dayLock.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
@@ -43,9 +43,10 @@ async function start() {
     // Start cron jobs
     startDayLockCron();
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
+
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);
