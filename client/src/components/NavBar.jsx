@@ -113,7 +113,7 @@ export default function NavBar({ isStudyPage = false }) {
                 {/* Logo */}
                 <div className="flex items-center gap-2.5">
                     <img src="/favicon.svg" alt="Logo" className="logo-mark" />
-                    <span className="logo-wordmark" style={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '1.2rem' }}>ZeroLie</span>
+                    <span className="logo-wordmark" style={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '1.2rem' }}>ZeroLies</span>
                 </div>
 
                 {/* Nav */}
