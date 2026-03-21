@@ -1,0 +1,32 @@
+# Root node_modules (if any)
+
+node_modules/
+
+# Client
+
+client/node_modules/
+client/build/
+client/dist/
+
+# Server
+
+server/node_modules/
+server/build/
+server/dist/
+
+# Env files
+
+.env
+.env.*
+server/.env
+
+# Logs
+
+*.log
+
+# OS + IDE
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
