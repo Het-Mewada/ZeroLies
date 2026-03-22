@@ -11,6 +11,9 @@ export default function CameraCapture({ onCapture, onClose }) {
 
   const startCamera = useCallback(async (facing) => {
     try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera requires HTTPS or localhost. Please check your URL.');
+      }
       if (stream) stream.getTracks().forEach(t => t.stop());
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -19,8 +22,8 @@ export default function CameraCapture({ onCapture, onClose }) {
       setStream(mediaStream);
       if (videoRef.current) videoRef.current.srcObject = mediaStream;
       setError(null);
-    } catch {
-      setError('Camera access denied. Please allow camera permissions.');
+    } catch (err) {
+      setError(err.message || 'Camera access denied. Please allow camera permissions.');
     }
   }, [stream]);
 

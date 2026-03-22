@@ -59,7 +59,10 @@ router.get('/', async (req, res) => {
     }
 
     // Get today's log
-    const todayLog = logMap[today] || null;
+    let todayLog = logMap[today] || null;
+    if (!todayLog) {
+      todayLog = await DailyLog.findOne({ date: today });
+    }
 
     res.json({
       streak: user.streak,
