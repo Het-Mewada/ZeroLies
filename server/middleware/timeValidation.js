@@ -1,12 +1,14 @@
 // Time windows for each task (24h format, IST)
 const TIME_WINDOWS = {
-  gym:              { start: 17, end: 23 },     // 5 PM - 11 PM
-  skincare_morning: { start: 6,  end: 11 },     // 6 AM - 11 AM
-  skincare_night:   { start: 21, end: 26 },     // 9 PM - 2 AM (26 = 2 AM next day)
-  wake:             { start: 0,  end: 8 },      // before 8 AM
+  gym: { start: 17, end: 23 },     // 5 PM - 11 PM
+  skincare_morning: { start: 6, end: 11 },     // 6 AM - 11 AM
+  skincare_night: { start: 21, end: 26 },     // 9 PM - 2 AM (26 = 2 AM next day)
+  wake: { start: 0, end: 8 },      // before 8 AM
 };
 
-import { NO_WINDOW_TASKS } from '../utils/taskConfig.js';
+// Tasks that don't have strict time windows
+const NO_WINDOW_TASKS = ['gate_study', 'night_walk', 'prayer', 'nofap', 'sleep'];
+
 import { getCurrentHourFloat, isSunday } from '../utils/time.js';
 
 export function validateTimeWindow(req, res, next) {
