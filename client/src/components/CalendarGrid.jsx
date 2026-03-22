@@ -39,6 +39,7 @@ export default function CalendarGrid({ calendar = [], onDayClick }) {
         }
 
         .cg-heading {
+        padding-left:15px;
           font-size: 0.5625rem;
           text-transform: uppercase;
           letter-spacing: 0.18em;
@@ -46,26 +47,30 @@ export default function CalendarGrid({ calendar = [], onDayClick }) {
           color: rgba(240,240,240,0.3);
           margin-bottom: 0.875rem;
         }
+.cg-scroll {
+  padding: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: pointer;
 
-        .cg-scroll {
-          overflow-x: auto;
-          overflow-y: hidden;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          cursor: pointer;
-        }
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+}
         .cg-scroll::-webkit-scrollbar { display: none; }
 
         .cg-inner {
           display: flex;
-          gap: 3px;
+          gap: 12px;
           min-width: fit-content;
         }
 
         .cg-day-labels {
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 6px;
           margin-right: 3px;
         }
 
@@ -84,7 +89,7 @@ export default function CalendarGrid({ calendar = [], onDayClick }) {
         .cg-week {
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 6px;
         }
 
         .cg-cell {

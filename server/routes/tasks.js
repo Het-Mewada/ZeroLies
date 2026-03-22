@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import DailyLog, { getOrCreateLog } from '../models/DailyLog.js';
-import { calculateScore, isDaySuccess, getMaxPossibleScore } from '../utils/scoring.js';
-import { validateTimeWindow, validateExifTimestamp, validateGps } from '../middleware/timeValidation.js';
+import { calculateScore, isDaySuccess } from '../utils/scoring.js';
+import { validateTimeWindow, validateGps } from '../middleware/timeValidation.js';
 import { burstProtection } from '../middleware/burstProtection.js';
 import { getISTDate, getTodayStr, getYesterdayStr } from '../utils/time.js';
 

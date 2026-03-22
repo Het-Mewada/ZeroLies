@@ -190,6 +190,13 @@ export default function Study() {
     return () => stopCamera();
   }, []);
 
+  // Automatically restore camera if a session is currently active (e.g., after page refresh)
+  useEffect(() => {
+    if (studyData?.activeSession && (!streamRef.current || !streamRef.current.active)) {
+      requestCameraPermission().catch(err => console.error('[CAMERA] Auto-restore failed:', err));
+    }
+  }, [studyData?.activeSession]);
+
   function stopCamera() {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop());

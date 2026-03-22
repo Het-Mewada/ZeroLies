@@ -49,18 +49,18 @@ router.post('/stop', async (req, res) => {
     session.isActive = false;
 
     // Validate: session must be >= 25 minutes
-    if (durationMin < 2) {
+    if (durationMin < 25) {
       session.isValid = false;
       await session.save();
       return res.json({
-        message: 'Session too short (< 2min). Not counted.',
+        message: 'Session too short (< 25min). Not counted.',
         session,
         isValid: false,
       });
     }
 
-    // Validate: check if snapshots exist at every 2 min interval (testing — change back to 5 for prod)
-    const SNAPSHOT_INTERVAL = 2;
+    // Validate: check if snapshots exist at every 5 min interval
+    const SNAPSHOT_INTERVAL = 5;
     const expectedSnapshots = Math.floor(durationMin / SNAPSHOT_INTERVAL);
     if (session.snapshots.length < expectedSnapshots) {
       session.isValid = false;

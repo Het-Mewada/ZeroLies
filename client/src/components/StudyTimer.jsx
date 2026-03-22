@@ -41,17 +41,14 @@ export default function StudyTimer({ studyData, onStart, onStop, onSnapshot }) {
   }, [isRunning]);
 
   useEffect(() => {
-    if (isRunning) {
-      snapshotIntervalRef.current = setInterval(() => {
-        const elapsedMin = Math.floor(elapsed / 60);
-        const expectedSnapshots = Math.floor(elapsedMin / 10);
-        if (expectedSnapshots > lastSnapshotAt) {
-          onSnapshot?.();
-          setLastSnapshotAt(expectedSnapshots);
-        }
-      }, 5000);
+    if (isRunning && elapsed > 0) {
+      const elapsedMin = Math.floor(elapsed / 60);
+      const expectedSnapshots = Math.floor(elapsedMin / 5);
+      if (expectedSnapshots > lastSnapshotAt) {
+        onSnapshot?.();
+        setLastSnapshotAt(expectedSnapshots);
+      }
     }
-    return () => clearInterval(snapshotIntervalRef.current);
   }, [isRunning, elapsed, lastSnapshotAt, onSnapshot]);
 
   const formatTime = (s) => {
@@ -67,7 +64,7 @@ export default function StudyTimer({ studyData, onStart, onStop, onSnapshot }) {
   const progress = Math.min(100, (totalMinutes / goal) * 100);
   const remaining = Math.max(0, goal - totalMinutes);
   const currentMin = Math.floor(elapsed / 60);
-  const nextSnapshotIn = 10 - (currentMin % 10);
+  const nextSnapshotIn = 5 - (currentMin % 5);
 
   const stats = [
     { icon: Clock, value: totalMinutes, label: 'today' },
@@ -119,7 +116,7 @@ export default function StudyTimer({ studyData, onStart, onStop, onSnapshot }) {
           padding-bottom: 0.3em;
           transition: color 0.4s;
         }
-        .st-ms.running { color: rgba(232,255,74,0.5); }
+        .st-ms.running { color: rgba(221, 255, 0, 0.5); }
         .st-ms.idle    { color: rgba(240,240,240,0.25); }
 
         .st-status {
