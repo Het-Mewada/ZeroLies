@@ -6,17 +6,8 @@ const TIME_WINDOWS = {
   wake:             { start: 0,  end: 8 },      // before 8 AM
 };
 
-// Tasks that don't have strict time windows
-const NO_WINDOW_TASKS = ['gate_study', 'night_walk', 'prayer', 'nofap', 'sleep'];
-
-function getCurrentHour() {
-  const now = new Date();
-  return now.getHours() + now.getMinutes() / 60;
-}
-
-function isSunday() {
-  return new Date().getDay() === 0;
-}
+import { NO_WINDOW_TASKS } from '../utils/taskConfig.js';
+import { getCurrentHourFloat, isSunday } from '../utils/time.js';
 
 export function validateTimeWindow(req, res, next) {
   const { taskId } = req.body;
@@ -50,7 +41,7 @@ export function validateTimeWindow(req, res, next) {
     return next(); // Unknown task, let route handle it
   }
 
-  const currentHour = getCurrentHour();
+  const currentHour = getCurrentHourFloat();
 
   // Handle overnight windows (e.g., skincare_night: 21-26 maps to 21-24 + 0-2)
   let inWindow = false;

@@ -2,18 +2,10 @@ import { Router } from 'express';
 import StudySession from '../models/StudySession.js';
 import { getOrCreateLog } from '../models/DailyLog.js';
 import { calculateScore, isDaySuccess } from '../utils/scoring.js';
+import { burstProtection } from '../middleware/burstProtection.js';
+import { getTodayStr } from '../utils/time.js';
 
 const router = Router();
-
-function getTodayStr() {
-  const now = new Date();
-  if (now.getHours() < 3 || (now.getHours() === 3 && now.getMinutes() < 5)) {
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    return yesterday.toISOString().split('T')[0];
-  }
-  return now.toISOString().split('T')[0];
-}
 
 // Start a study session
 router.post('/start', async (req, res) => {

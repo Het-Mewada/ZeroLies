@@ -2,13 +2,7 @@ import cron from 'node-cron';
 import DailyLog, { getOrCreateLog } from '../models/DailyLog.js';
 import { getUser } from '../models/User.js';
 import { calculateScore, isDaySuccess, TASK_POINTS } from '../utils/scoring.js';
-
-function getYesterdayStr() {
-  const now = new Date();
-  const yesterday = new Date(now);
-  yesterday.setDate(yesterday.getDate() - 1);
-  return yesterday.toISOString().split('T')[0];
-}
+import { getYesterdayStr } from '../utils/time.js';
 
 async function lockDay() {
   try {

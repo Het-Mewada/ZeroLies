@@ -3,19 +3,9 @@ import DailyLog, { getOrCreateLog } from '../models/DailyLog.js';
 import { calculateScore, isDaySuccess, getMaxPossibleScore } from '../utils/scoring.js';
 import { validateTimeWindow, validateExifTimestamp, validateGps } from '../middleware/timeValidation.js';
 import { burstProtection } from '../middleware/burstProtection.js';
+import { getISTDate, getTodayStr, getYesterdayStr } from '../utils/time.js';
 
 const router = Router();
-
-function getTodayStr() {
-  const now = new Date();
-  // If before 3:05 AM, treat as previous day
-  if (now.getHours() < 3 || (now.getHours() === 3 && now.getMinutes() < 5)) {
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    return yesterday.toISOString().split('T')[0];
-  }
-  return now.toISOString().split('T')[0];
-}
 
 // Submit a task
 router.post('/submit', burstProtection, validateTimeWindow, async (req, res) => {
@@ -119,15 +109,17 @@ router.post('/wake-checkin', async (req, res) => {
       return res.status(400).json({ error: 'Already checked in.' });
     }
 
+    const istNow = getISTDate();
+
     // Sunday excluded
-    if (now.getDay() === 0) {
+    if (istNow.getUTCDay() === 0) {
       // Auto-mark as completed on Sunday
       log.tasks.wake = {
         status: 'completed',
-        completedAt: now,
+        completedAt: new Date(),
         proof: { imageUrl: null, gps: { lat: null, lng: null }, exifTimestamp: null },
       };
-    } else if (now.getHours() < 8) {
+    } else if (istNow.getUTCHours() < 8) {
       log.tasks.wake = {
         status: 'completed',
         completedAt: now,
@@ -163,16 +155,14 @@ router.post('/wake-checkin', async (req, res) => {
 // Sleep check (called when app is opened)
 router.get('/sleep-check', async (req, res) => {
   try {
-    const now = new Date();
-    const hour = now.getHours();
-    const minute = now.getMinutes();
+    const istNow = getISTDate();
+    const hour = istNow.getUTCHours();
+    const minute = istNow.getUTCMinutes();
 
     // ── 3:00 AM – 4:59 AM → HARD FAIL: mark yesterday's sleep as failed ──
     if (hour >= 3 && hour < 5) {
       // The "today" for sleep is actually yesterday (since day resets at 3:05 AM)
-      const yesterday = new Date(now);
-      yesterday.setDate(yesterday.getDate() - 1);
-      const dateStr = yesterday.toISOString().split('T')[0];
+      const dateStr = getYesterdayStr();
       const log = await getOrCreateLog(dateStr);
 
       if (log.tasks.sleep.status !== 'completed') {
